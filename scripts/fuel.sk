@@ -1,0 +1,11 @@
+on fuel burning:
+    wait 1 tick
+    set {_burnTime} to tag "BurnTime" of nbt of event-block
+    set {_cookTime} to tag "CookTime" of nbt of event-block
+    while {_burnTime} is not 0:
+        wait 1 tick
+        add "{BurnTime:%{_burnTime} - 20%}" to nbt of event-block
+        set {_cookTime} to tag "CookTime" of nbt of event-block
+        if {_cookTime} < 200:
+            add "{CookTime:%{_cookTime} + 20%}" to nbt of event-block
+            set {_burnTime} to tag "BurnTime" of nbt of event-block
