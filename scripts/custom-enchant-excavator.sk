@@ -1,0 +1,82 @@
+
+on mine:
+    set {_enchantNameAfter} to "採鉱"
+
+    set {_blockList.enchantName.1} to "&7石"
+    set {_blockList.enchantName.2} to "&c花崗岩"
+    set {_blockList.enchantName.3} to "&f閃緑岩"
+    set {_blockList.enchantName.4} to "&0黒曜石"
+    set {_blockList.enchantName.5} to "&8深層岩"
+    set {_blockList.enchantName.6} to "&8凝灰岩"
+    
+    set {_blockList.itemId.1} to "stone"
+    set {_blockList.itemId.2} to "granite"
+    set {_blockList.itemId.3} to "diorite"
+    set {_blockList.itemId.4} to "obsidian"
+    set {_blockList.itemId.5} to "deepslate"
+    set {_blockList.itemId.6} to "tuff"
+
+    loop 6 times:
+        set {_itemId} to {_blockList.itemId.%loop-number%}
+        set {_enchantName} to {_blockList.enchantName.%loop-number%}
+
+        # 5*5*5
+        if lore of player's tool contains "%{_enchantName}%%{_enchantNameAfter}% VII":
+            set {_width} to 5
+            set {_height} to 5
+            set {_bottom} to -2
+
+        # 5*3*5
+        else if lore of player's tool contains "%{_enchantName}%%{_enchantNameAfter}% VI":
+            set {_width} to 5
+            set {_height} to 3
+            set {_bottom} to -1
+
+        # 5*2*5
+        else if lore of player's tool contains "%{_enchantName}%%{_enchantNameAfter}% V":
+            set {_width} to 5
+            set {_height} to 2
+            set {_bottom} to -1
+
+        # 3*3*3
+        else if lore of player's tool contains "%{_enchantName}%%{_enchantNameAfter}% IV":
+            set {_width} to 3
+            set {_height} to 3
+            set {_bottom} to -1
+
+        # 3*2*3
+        else if lore of player's tool contains "%{_enchantName}%%{_enchantNameAfter}% III":
+            set {_width} to 3
+            set {_height} to 2
+            set {_bottom} to -1
+
+        # 1*3*1
+        else if lore of player's tool contains "%{_enchantName}%%{_enchantNameAfter}% II":
+            set {_width} to 1
+            set {_height} to 3
+            set {_bottom} to -1
+
+        # 1*2*1
+        else if lore of player's tool contains "%{_enchantName}%%{_enchantNameAfter}% I":
+            set {_width} to 1
+            set {_height} to 2
+            set {_bottom} to -1
+
+        else:
+            continue
+
+        # Break
+        set {_widthMin} to ceil({_width} / 2 - 1)
+        set {_x} to floor(X-location of event-block)
+        add {_widthMin} to {_x}
+        loop {_width} times:
+            set {_y} to floor(Y-location of event-block)
+            add {_bottom} to {_y}
+            loop {_height} times:
+                set {_z} to floor(Z-location of event-block)
+                add {_widthMin} to {_z}
+                loop {_width} times:
+                    make console execute command "/execute at %player% if block %{_x}% %{_y}% %{_z}% %{_itemId}% run setblock %{_x}% %{_y}% %{_z}% air destroy"
+                    remove 1 from {_z}
+                add 1 to {_y}
+            remove 1 from {_x}
