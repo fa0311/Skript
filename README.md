@@ -8,4 +8,4 @@
 
 ## scripts
 > ### [fast-furnaces](/scripts/fast-furnaces.sk)<br>
-> x10 furnaces<br>
+> x20 furnaces<br>
