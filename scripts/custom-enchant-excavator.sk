@@ -1,22 +1,18 @@
 
 on mine:
-    set {_enchantNameAfter} to "採鉱"
+    set {_enchantNameAfter} to "採掘"
 
-    set {_blockList.enchantName.1} to "&7石"
-    set {_blockList.enchantName.2} to "&c花崗岩"
-    set {_blockList.enchantName.3} to "&f閃緑岩"
-    set {_blockList.enchantName.4} to "&0黒曜石"
-    set {_blockList.enchantName.5} to "&8深層岩"
-    set {_blockList.enchantName.6} to "&8凝灰岩"
+    set {_blockList.enchantName.1} to "&6土"
+    set {_blockList.enchantName.2} to "&e砂"
+    set {_blockList.enchantName.3} to "&7砂利"
+    set {_blockList.enchantName.4} to "&7粘土"
     
-    set {_blockList.itemId.1} to "stone"
-    set {_blockList.itemId.2} to "granite"
-    set {_blockList.itemId.3} to "diorite"
-    set {_blockList.itemId.4} to "obsidian"
-    set {_blockList.itemId.5} to "deepslate"
-    set {_blockList.itemId.6} to "tuff"
+    set {_blockList.itemId.1} to "dirt"
+    set {_blockList.itemId.2} to "sand"
+    set {_blockList.itemId.3} to "gravel"
+    set {_blockList.itemId.4} to "clay"
 
-    loop 6 times:
+    loop 4 times:
         set {_itemId} to {_blockList.itemId.%loop-number%}
         set {_enchantName} to {_blockList.enchantName.%loop-number%}
 
