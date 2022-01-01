@@ -1,0 +1,17 @@
+command /start:
+    description:aaa
+    usage:aaa
+    aliases:/s
+    trigger:
+        world is "world":
+            make console execute command "/execute in storm run tp %player% %{storm_x}% 256 0"
+            wait 3 tick
+            set {_onGround} to tag "OnGround" of nbt of event-entity
+            set {_i} to 0
+            while {_onGround} is 0:
+                wait 10 tick
+                add 1 to {_i}
+                make console execute command "/effect give %player% minecraft:resistance 1 255"
+                set {_onGround} to tag "OnGround" of nbt of event-entity
+                if {_i} > 20:
+                    stop

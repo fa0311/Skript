@@ -1,0 +1,22 @@
+function stopTimer(i: number, player: player, name: text, command: text):
+    send "%{_name}%するには%{_i}%秒間止まってください" to {_player}    
+    set {_baseX} to X-location of {_player}
+    set {_baseY} to Y-location of {_player}
+    set {_baseZ} to Z-location of {_player}
+    loop {_i} times:
+        wait 1 second
+        set {_x} to X-location of {_player}
+        set {_y} to Y-location of {_player}
+        set {_z} to Z-location of {_player}
+        if abs({_x} - {_baseX}) > 1:
+            send "動いたので%{_name}%に失敗しました" to {_player}
+            stop
+        if abs({_y} - {_baseY}) > 1:
+            send "動いたので%{_name}%に失敗しました" to {_player}
+            stop
+        if abs({_z} - {_baseZ}) > 1:
+            send "動いたので%{_name}%に失敗しました" to {_player}
+            stop
+        if loop-number > 0:
+            send "あと%{_i} - loop-number%秒" to {_player}
+    make console execute command "%{_command}%"

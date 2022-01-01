@@ -1,0 +1,24 @@
+every 1 tick:
+    add 0.05 to {storm_x}
+
+every 200 tick:
+    if floor({storm_x}) is not floor({last_storm_x}):
+        if floor({storm_x - 0.01}) is floor({last_storm_x}):
+            add 0.01 to {storm_x}
+    make console execute command "/execute in storm run worldborder center %{storm_x}% 0"
+    set {last_storm_x} to {storm_x}
+
+on skript start:
+    set {storm_x} to 0
+
+respawn:
+    broadcast "%player%"
+    wait 1 tick
+    make console execute command "/spawnpoint %player% 0 -60 0"
+    make console execute command "/tp %player% 0 -60 0"
+
+command /move:
+    description:aaa
+    usage:aaa
+    trigger:
+        add 500 to {storm_x}

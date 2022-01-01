@@ -1,0 +1,50 @@
+every 1 tick:
+    loop all players in "world":
+        set {_x} to X-location of loop-player
+        set {_y} to Y-location of loop-player
+        set {_z} to Z-location of loop-player
+
+        if {_y} < 0:
+            execute console command "/mvtp %loop-player% world"
+
+
+        if {_x} < 38:
+        else if {_x} > 39:
+        else if {_y} < 60:
+        else if {_y} > 63:
+        else if {_z} < -1:
+        else if {_z} > 2:
+        else:
+            execute console command "/mvtp %loop-player% mv/build"
+            execute console command "/mv confirm"
+
+        if {_x} < -3:
+        else if {_x} > 3:
+        else if {_y} < 60:
+        else if {_y} > 63:
+        else:
+            if {_z} < 14.5:
+            else if {_z} > 15.5:
+            else:
+                execute console command "/mvtp %loop-player% mv/resource"
+                execute console command "/mv confirm"
+                execute console command "/effect give %loop-player% minecraft:absorption 30 9 true"
+
+            if {_z} < -14.5:
+            else if {_z} > -13.5:
+            else:
+                execute console command "/mvtp %loop-player% player/%loop-player%"
+                execute console command "/mv confirm"
+
+
+on player world change:
+    if world is "world_nether":
+        execute console command "/mvtp %player% world"
+    wait 1 tick
+    execute console command "/tab reload"
+
+command /world:
+    description:ロビーにテレポート
+    permission: yuki.world
+    trigger:
+        stopTimer(3, player, "テレポート", "/mvtp %player% world")

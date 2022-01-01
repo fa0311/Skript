@@ -1,0 +1,4 @@
+
+function greekNumberConverter(i: number) :: text:
+    set {_greekNumberConverter::*} to "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"
+    return {_greekNumberConverter::%{_i}%}

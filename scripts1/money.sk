@@ -1,0 +1,29 @@
+
+on player pick up:
+    wait 1 tick
+    set {_amount} to item amount of event-item
+    if type of event-item are diamond:
+        remove all diamond from player's inventory
+        giveMoney({_amount}, player)
+
+on inventory click:
+    set {_amount} to item amount of event-item type
+    if type of event-item type are diamond:
+        set cursor slot of player to air
+        wait 1 tick
+        set cursor slot of player to air
+        remove all diamond from player's inventory
+        giveMoney({_amount}, player)
+
+on xp spawn:
+    cancel event
+
+respawn:
+    wait 1 tick
+    make console execute command "/xp set %player% %{money.%player%}%l"
+
+function giveMoney(amount: number, player: player):
+    add {_amount} to {money.%{_player}%}
+    add {_amount} to {money.%{_player}%}
+    make console execute command "/xp set %{_player}% %{money.%{_player}%}%l"
+    make console execute command "/execute at %{_player}% run playsound entity.player.levelup master %{_player}%"

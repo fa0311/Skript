@@ -1,0 +1,7 @@
+
+command /player version:
+    description: 皆のバージョン
+    trigger:
+        loop all players:
+            make console execute command "/papi cmdparse %loop-player% tellraw %player% {""text"":""%loop-player%: %%viaversion_player_protocol_version%%""}"
+

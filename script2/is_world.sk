@@ -1,0 +1,28 @@
+function is_build_world(world: world) :: boolean:
+    if "%{_world}%" contains "player/":
+        return true
+    else if "%{_world}%" is "mv/build":
+        return true
+    else:
+        return false
+
+function is_player_world(world: world) :: boolean:
+    if "%{_world}%" contains "player/":
+        return true
+    else:
+        return false
+
+
+function is_resource_world(world: world) :: boolean:
+    if "%{_world}%" contains "mv/resource":
+        return true
+    else:
+        return false
+
+function is_other_world(world: world) :: boolean:
+    if is_resource_world({_world}) is false:
+        return false
+    else if is_build_world({_world}) is false:
+        return false
+    else:
+        return true

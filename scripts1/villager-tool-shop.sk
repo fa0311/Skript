@@ -1,0 +1,99 @@
+
+on rightclick:
+    if world is "world":
+        if name of event-entity is "採鉱屋":
+            shopA(1, player)
+        else if name of event-entity is "採掘屋":
+            shopB(1, player)
+ 
+on inventory click:
+    if event-inventory is player's inventory:
+        stop
+    if name of event-inventory contains "採鉱屋":
+        loop 20 times:
+            if name of event-inventory is "採鉱屋[%loop-number%]":
+                if index of event-slot = 53:
+                    shopA(loop-number + 1, player)
+                else if index of event-slot = 45:
+                    shopA(loop-number - 1, player)
+                else:
+                    if loop-number * loop-number * (mod(index of event-slot, 9) - 1) <= {money.%player%}:
+                        giveMoney(loop-number * loop-number * (mod(index of event-slot, 9) - 1) * -1, player)
+                        delete line 2 of event-slot's lore
+                        give player event-slot
+                        shopA(loop-number, player)
+    
+    else if name of event-inventory contains "採掘屋":
+        loop 20 times:
+            if name of event-inventory is "採掘屋[%loop-number%]":
+                if index of event-slot = 53:
+                    shopB(loop-number + 1, player)
+                else if index of event-slot = 45:
+                    shopB(loop-number - 1, player)
+                else:
+                    if loop-number * loop-number * (mod(index of event-slot, 9) - 1) <= {money.%player%}:
+                        giveMoney(loop-number * loop-number * (mod(index of event-slot, 9) - 1) * -1, player)
+                        delete line 2 of event-slot's lore
+                        give player event-slot
+                        shopB(loop-number, player)
+    
+    else:
+        stop
+    cancel event
+    if type of event-slot is air:
+        stop
+
+        
+
+
+function shopA(page: number, player: player):
+    set {_gui} to a new chest inventory with 6 row with name "採鉱屋[%{_page}%]"
+    set {_loreList::*} to "&7石採鉱", "&c花崗岩採鉱", "&f閃緑岩採鉱", "&0黒曜石採鉱", "&8深層岩採鉱", "&8凝灰岩採鉱"
+    set {_nbtList::*} to "{Damage:1248}", "{Damage:936}", "{Damage:624}", "{Damage:312}", "{Damage:0}"
+    set {_N} to 2
+
+    loop {_loreList::*}:
+        loop {_nbtList::*}:
+            set {_item} to diamond pickaxe
+            set line 1 of {_item}'s lore to "%loop-value-1% %greekNumberConverter({_page})%"
+            set line 2 of {_item}'s lore to "%{_page} * {_page} * (mod({_N}, 9) - 1)%xp"
+            add "%loop-value-2%" to {_item}'s nbt
+            set slot {_N} of {_gui} to {_item}
+            add 1 to {_N}
+        add 9 - size of {_nbtList::*} to {_N}
+
+    if {_page} < 20:
+        set {_item} to stone named "次へ"
+        set slot 53 of {_gui} to {_item}
+    if {_page} > 1:
+        set {_item} to stone named "戻る"
+        set slot 45 of {_gui} to {_item}
+    open {_gui} to {_player}
+
+
+function shopB(page: number, player: player):
+    set {_gui} to a new chest inventory with 6 row with name "採掘屋[%{_page}%]"
+    set {_loreList::*} to "&6土採掘", "&e砂採掘", "&7砂利採掘", "&7粘土採掘"
+    set {_nbtList::*} to "{Damage:1248}", "{Damage:936}", "{Damage:624}", "{Damage:312}", "{Damage:0}"
+    set {_N} to 2
+
+    loop {_loreList::*}:
+        loop {_nbtList::*}:
+            set {_item} to diamond shovel
+            set line 1 of {_item}'s lore to "%loop-value-1% %greekNumberConverter({_page})%"
+            set line 2 of {_item}'s lore to "%{_page} * {_page} * (mod({_N}, 9) - 1)%xp"
+            add "%loop-value-2%" to {_item}'s nbt
+            set slot {_N} of {_gui} to {_item}
+            add 1 to {_N}
+        add 9 - size of {_nbtList::*} to {_N}
+
+    if {_page} < 20:
+        set {_item} to stone named "次へ"
+        set slot 53 of {_gui} to {_item}
+    if {_page} > 1:
+        set {_item} to stone named "戻る"
+        set slot 45 of {_gui} to {_item}
+    open {_gui} to {_player}
+
+
+# add "{Damage:10}" to player's tool's nbt

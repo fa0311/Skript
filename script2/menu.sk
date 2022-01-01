@@ -1,0 +1,72 @@
+
+command /m:
+    description: メニュー
+    permission: yuki.menu
+    aliases: /menu
+    trigger:
+        set {_gui} to a new chest inventory with 6 row with name "メニュー"
+
+        set {_itemList::*} to player head, diamond pickaxe, diamond pickaxe, diamond pickaxe, wood block, map, map
+        set {_nameList::*} to "/world", "/mcctop", "/mcrank", "/mcstats", "/tpa", "/tomap <url>","/maps"
+        set {_loreList::*} to "ロビーにテレポート", "ランキングを表示", "自分のランキングを表示", "自分のステータスを確認", "プライベート建築ワールドに参加リクエストを送る", "写真マップを作る", "写真マップを見る"
+        set {_cmdList::*} to "world", "mctop", "mcrank", "mcstats", "select player tpa", "select chat tomap マップにしたい画像のURLをチャットに入力してください", "maps"
+
+        set {_texturesList::*} to "earth"
+        set {_texturesValueList::earth} to "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI4OWQ1YjE3ODYyNmVhMjNkMGIwYzNkMmRmNWMwODVlODM3NTA1NmJmNjg1YjVlZDViYjQ3N2ZlODQ3MmQ5NCJ9fX0="
+
+
+        set {_N} to 0
+        loop {_itemList::*}:
+            set {_item} to {_itemList::%loop-index%}
+            set name of {_item} to {_nameList::%loop-index%}
+            set line 1 of {_item}'s lore to {_loreList::%loop-index%}
+            add "{cmd: ""%{_cmdList::%loop-index%}%""}" to {_item}'s nbt
+            if {_itemList::%loop-index%} is player head:
+                add "{SkullOwner:{Id:[I;-475097093,-1232581123,-1897520009,-1863176499],Properties:{textures:[{Value:""%{_texturesValueList::%{_texturesList::%loop-index%}%}%""}]}}}" to {_item}'s nbt
+            set slot {_N} of {_gui} to {_item}
+            add 1 to {_N}
+        open {_gui} to player
+
+        
+command /select <text> <text> [<text>]:
+    description: コマンド
+    permission: yuki.menu
+    trigger:
+        set {_cmd} to arg-2
+        if arg-1 is "player":
+            set {_gui} to a new chest inventory with 6 row with name "メニュー"
+            set {_N} to 0
+            loop all players:
+                set {_item} to player head
+                set name of {_item} to "%{_cmd}% %loop-player%"
+                add "{SkullOwner: ""%loop-player%""}" to {_item}'s nbt
+                add "{cmd: ""%{_cmd}% %loop-player%""}" to {_item}'s nbt
+                set slot {_N} of {_gui} to {_item}
+                add 1 to {_N}
+            open {_gui} to player
+
+        else if arg-1 is "chat":
+            set {select_chat::%player%::flag} to true
+            set {select_chat::%player%::cmd} to {_cmd}
+            send arg-3 to player
+
+
+on server stop:
+
+
+
+on chat:
+    if {select_chat::%player%::flag} is true:
+        cancel event
+        set {_s::*} to split "%message%" at "("
+        set {_message::*} to split "%{_s::2}%" at ")"
+        execute player command "%{select_chat::%player%::cmd}% %{_message::1}%"
+        delete {select_chat::%player%::*}
+
+
+on inventory click:
+    if name of event-inventory is "メニュー":
+        cancel event
+        set {_cmd} to tag "cmd" of nbt of event-item
+        close player's inventory
+        execute player command {_cmd}

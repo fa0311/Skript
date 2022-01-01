@@ -1,0 +1,87 @@
+
+on first join:
+    wait 1 ticks
+    execute console command "/execute in minecraft:overworld as %player% run tp @s 0 90 40 180 0"
+
+
+
+
+on join:
+    wait 2 ticks
+
+    set {_player} to "%player%"
+    if subtext of {_player} from characters 0 to 1 is ".":
+        set {_player} to subtext of {_player} from characters 2 to (length of "%{_player}%")
+        execute console command "/luckperms user %player% parent add bedrock"
+
+    if {whitelist::%{_player}%} is not true:
+        broadcast "%player%さんはホワイトリストに追加されていません"
+        execute console command "/execute in minecraft:overworld as %player% run tp @s 0 90 40 180 0"
+        execute console command "/luckperms user %player% parent remove white_list"
+        execute console command "/execute as %player% run tellraw @s ["""",{""text"":""\u3051\u3080\u3061\u3083\u3093\u30b5\u30fc\u30d0\u30fc\u3078\u3088\u3046\u3053\u305d\n\u3042\u306a\u305f\u306fDiscord\u306b\u53c2\u52a0\u3057\u3066\u3044\u306a\u3044\u305f\u3081\u3053\u306e\u30b5\u30fc\u30d0\u30fc\u3067\u904a\u3076\u3053\u3068\u306f\u51fa\u6765\u307e\u305b\u3093\nDiscord\u306b\u53c2\u52a0\u3057\u3066\u8a8d\u8a3c\u3092\u3057\u3066\u304f\u3060\u3055\u3044\nURL\u3092\u5165\u529b\u3059\u308b\u304b"",""clickEvent"":{""action"":""open_url"",""value"":""https://mc.yuki0311.com""}},{""text"":""\u3053\u3053"",""color"":""dark_green"",""clickEvent"":{""action"":""open_url"",""value"":""https://mc.yuki0311.com""}},{""text"":""\u3092\u30af\u30ea\u30c3\u30af\u3057\u3066\u304f\u3060\u3055\u3044\nhttps://mc.yuki0311.com"",""clickEvent"":{""action"":""open_url"",""value"":""https://mc.yuki0311.com""}}]"
+
+    else if world is "world":
+        set {_x} to X-location of player
+        set {_y} to Y-location of player
+        set {_z} to Z-location of player
+
+        if {_x} < -2:
+        else if {_x} > 3:
+        else if {_y} < 90:
+        else if {_y} > 93:
+        else if {_z} < 38:
+        else if {_z} > 43:
+        else:
+            execute console command "/mv clone mv/player_default player/%player%"
+            execute console command "/mvtp %player% world"
+            broadcast "%player%さんが初参加です！"
+    
+    if {whitelist::%{_player}%} is true:
+        execute console command "/luckperms user %player% parent add white_list"
+        execute console command "/mv import player/%player% normal"
+
+
+command /whitelist_check <text>:
+    description: ホワリス確認
+    permission: op
+    trigger:
+        if {whitelist::%arg-1%} is not true:
+            send "プレイヤーはホワイトリストです"
+        else:
+            send "プレイヤーはホワイトリストではありません"
+    
+command /whitelist_all:
+    description: ホワリスみんな
+    permission: op
+    trigger:
+        loop {whitelist::*}:
+            send "%loop-index%"
+
+
+command /whitelist_add <text>:
+    description: ホワリス追加
+    permission: op
+    trigger:
+        if {whitelist::%arg-1%} is not true:
+            set {whitelist::%arg-1%} to true
+            send "[whitelist-alert]:%arg-1%をホワイトリストに追加しました"
+        else:
+            send "[whitelist-alert]:%arg-1%は既にホワイトリストでした"
+
+
+command /whitelist_remove <text>:
+    description: ホワリス削除
+    permission: op
+    trigger:
+        if {whitelist::%arg-1%} is not true:
+            send "%arg-1%はホワイトリストではありません"
+            # send "[whitelist-alert]:%arg-1%はホワイトリストではありません"
+        else:
+            delete {whitelist::%arg-1%}
+            send "[whitelist-alert]:%arg-1%をホワイトリストから削除しました"
+
+
+on server stop:
+    loop all worlds:
+        if is_player_world(loop-value) is true:
+            make console execute command "/mv remove %loop-value%"

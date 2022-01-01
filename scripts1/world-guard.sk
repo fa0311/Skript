@@ -1,0 +1,14 @@
+on break:
+    player is not "fa0311":
+        world is "world":
+            cancel event
+
+on place:
+    player is not "fa0311":
+        world is "world":
+            cancel event
+
+on damage:
+    attacker is not "fa0311":
+        world is "world":
+            cancel event

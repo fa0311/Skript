@@ -1,0 +1,6 @@
+command /fs:
+    description:fast-reload skript
+    usage:failed
+    aliases:/fs
+    trigger:
+        make player execute command "/sk reload scripts"

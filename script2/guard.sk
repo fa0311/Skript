@@ -1,0 +1,77 @@
+
+on spawn:
+    if is_build_world(world) is true:
+        if "%spawn reason%" is "natural":
+            cancel event
+        else if "%spawn reason%" is "village defense":
+            cancel event
+        else if "%spawn reason%" is "<none>":
+        else:
+            set {_tags::*} to tag "Tags" of nbt of event-entity
+            if "%{_tags::1}%" is "<none>":
+                set {_timestamp} to unix timestamp of now
+                add "{Tags:[""%floor({_timestamp})%""]}" to nbt of event-entity
+
+
+respawn:
+    wait 1 tick
+    if is_resource_world(world) is true:
+        execute console command "/effect give %player% minecraft:absorption 30 9 true"
+
+on right click:
+    if player is sneaking:
+        if is_build_world(world of event-entity) is true:
+            set {_timestamp} to unix timestamp of now
+            set {_tags::*} to tag "Tags" of nbt of event-entity
+            if "%{_tags::1}%" is not "<none>":
+                set {_cislo} to "%{_tags::1}%" parsed as integer
+                set {_age} to ({_timestamp} - {_cislo}) / 432000 * 100
+                set {_CustomName} to tag "CustomName" of nbt of event-entity
+                add "{CustomName:'{""text"":""%{_age}%歳""}'}" to nbt of event-entity
+                wait 3 second
+                if "%{_CustomName}%" contains "歳":
+                else if "%{_CustomName}%" is not "<none>":
+                    add "{CustomName: '%{_CustomName}%'}" to nbt of event-entity
+                else:
+                    add "{CustomName: ''}" to nbt of event-entity
+
+
+every 1 seconds:
+    set {_timestamp} to unix timestamp of now
+    loop all entities:
+        if is_build_world(world of loop-entity) is true:
+            set {_tags::*} to tag "Tags" of nbt of loop-entity
+            if "%{_tags::1}%" is not "<none>":
+                set {_cislo} to "%{_tags::1}%" parsed as integer
+                set {_age} to ({_timestamp} - {_cislo}) / 432000 * 100
+                if {_age} > 99:
+                    delete loop-entity
+
+on death of player:
+    if is_build_world(world of event-entity) is true:
+        if damage cause is void:
+            set {_drops::*} to drops
+            remove drops from the drops
+            wait 5 ticks
+            add {_drops::*} to player's inventory
+
+on break:
+    player is not "fa0311":
+        world is "world":
+            cancel event
+
+on place:
+    player is not "fa0311":
+        world is "world":
+            cancel event
+
+on damage of player:
+    attacker is not "fa0311":
+        world is "world":
+            cancel event
+
+every 5 second:
+    loop all players in "mv/build":
+        set {_y} to Y-location of loop-player
+        if {_y} < 30:
+            execute console command "/effect give %loop-player% minecraft:instant_damage"
