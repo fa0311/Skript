@@ -68,7 +68,7 @@
 
 けむちゃんサーバーv2に使用しているSkriptまとめ
 
-> ### [cmd](/scripts2/cmd)<br>
+> ### [cmd](/scripts2/cmd.sk)<br>
 > 単体で動作する便利コマンドとか<br>
 > プレイヤー全員のバージョンを取得する<br>
 > ` /player version `<br>
