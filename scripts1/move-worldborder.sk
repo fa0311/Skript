@@ -18,7 +18,5 @@ respawn:
     make console execute command "/tp %player% 0 -60 0"
 
 command /move:
-    description:aaa
-    usage:aaa
     trigger:
         add 500 to {storm_x}

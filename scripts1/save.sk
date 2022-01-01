@@ -1,6 +1,4 @@
 command /save:
-    description:aaa
-    usage:aaa
     trigger:
         world is "storm":
             set {_baseX} to X-location of player

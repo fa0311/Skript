@@ -1,6 +1,4 @@
 command /start:
-    description:aaa
-    usage:aaa
     aliases:/s
     trigger:
         world is "world":
