@@ -12,11 +12,10 @@ on spawn:
                 set {_timestamp} to unix timestamp of now
                 add "{Tags:[""%floor({_timestamp})%""]}" to nbt of event-entity
 
-
-respawn:
-    wait 1 tick
-    if is_resource_world(world) is true:
-        execute console command "/effect give %player% minecraft:absorption 30 9 true"
+on death of player:
+    bed of player exists:
+    else:
+        execute console command "/execute in minecraft:overworld run spawnpoint %player% 0 60 0"
 
 on right click:
     if player is sneaking:

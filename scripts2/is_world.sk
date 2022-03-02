@@ -26,3 +26,11 @@ function is_other_world(world: world) :: boolean:
         return false
     else:
         return true
+
+function is_normal_world(world: world) :: boolean:
+    if "%{_world}%" contains "_nether":
+        return false
+    else if "%{_world}%" contains "_end":
+        return false
+    else:
+        return true

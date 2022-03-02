@@ -1,0 +1,43 @@
+on explosion prime:
+    set {_name} to name of event-entity
+    if "%type of event-entity%" is not "TNT":
+    else if "%{_name}%" is "<none>":
+    else if {_name} is "下のコマンドブロック破壊":
+        cancel event
+        set {_x} to floor(X-location of event-entity)
+        set {_y} to floor(Y-location of event-entity)
+        set {_z} to floor(Z-location of event-entity)
+        set {_world} to world of event-entity
+        execute console command "execute in %{_world}% run fill %{_x}% %{_y} - 1% %{_z}% %{_x}% %{_y} - 1% %{_z}% air replace command_block"
+    else:
+        cancel event
+
+        if {_name} is "ロビーに戻る":
+            set {_cmd} to "execute as @p[distance=..3] in overworld run tp 0 60 0"
+
+        set {_x} to floor(X-location of event-entity)
+        set {_y} to floor(Y-location of event-entity)
+        set {_z} to floor(Z-location of event-entity)
+        set {_world} to world of event-entity
+
+        
+        execute console command "/execute in %{_world}% run setblock %{_x}% %{_y}% %{_z}% minecraft:command_block{Command: ""/%{_cmd}%""}"
+
+
+on place of player_head:
+    world is not "world":
+        set {_x} to X-location of event-block
+        set {_y} to Y-location of event-block
+        set {_z} to Z-location of event-block
+        set {_world} to world of event-block
+        set {_name} to name of player's held item
+        set {_lore::*} to lore of player's held item
+        
+        set {_Fuse::*} to split "%{_lore::1}%" at ":"
+        set {_Fuse::*} to split "%{_Fuse::2}%" at "秒"
+        set {_Fuse} to "%{_Fuse::1}%" parsed as integer
+        set {_Fuse} to {_Fuse} * 20
+
+        if {_Fuse} is not 0:
+            set block at event-block to air
+            execute console command "/execute in %{_world}% run summon minecraft:tnt %{_x}% %{_y}% %{_z}% {Fuse:%{_Fuse}%,CustomName:""\""%{_name}%\"""",CustomNameVisible:1}"

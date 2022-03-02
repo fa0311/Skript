@@ -6,13 +6,14 @@ command /m:
     trigger:
         set {_gui} to a new chest inventory with 6 row with name "メニュー"
 
-        set {_itemList::*} to player head, diamond pickaxe, diamond pickaxe, diamond pickaxe, wood block, map, map
-        set {_nameList::*} to "/world", "/mcctop", "/mcrank", "/mcstats", "/tpa", "/tomap <url>","/maps"
-        set {_loreList::*} to "ロビーにテレポート", "ランキングを表示", "自分のランキングを表示", "自分のステータスを確認", "プライベート建築ワールドに参加リクエストを送る", "写真マップを作る", "写真マップを見る"
-        set {_cmdList::*} to "world", "mctop", "mcrank", "mcstats", "select player tpa", "select chat tomap マップにしたい画像のURLをチャットに入力してください", "maps"
+        set {_itemList::*} to player head, map, diamond pickaxe, diamond pickaxe, diamond pickaxe, wood block, map, map, player head
+        set {_nameList::*} to "/world", "/customrecipe_all", "/mctop", "/mcrank", "/mcstats", "/tpa", "/tomap <url>","/maps","/head_textures <textures>"
+        set {_loreList::*} to "ロビーにテレポート", "拡張レシピ確認","ランキングを表示", "自分のランキングを表示", "自分のステータスを確認", "プライベート建築ワールドに参加リクエストを送る", "写真マップを作る", "写真マップを見る", "頭を作る"
+        set {_cmdList::*} to "world", "customrecipe_all", "mctop", "mcrank", "mcstats", "select player tpa", "select chat tomap マップにしたい画像のURLをチャットに入力してください", "maps","select chat head_textures 頭にしたいtexturesをチャットに入力してください"
 
-        set {_texturesList::*} to "earth"
+        set {_texturesList::*} to "earth","","","","","","","steve"
         set {_texturesValueList::earth} to "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI4OWQ1YjE3ODYyNmVhMjNkMGIwYzNkMmRmNWMwODVlODM3NTA1NmJmNjg1YjVlZDViYjQ3N2ZlODQ3MmQ5NCJ9fX0="
+        set {_texturesValueList::steve} to "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ=="
 
 
         set {_N} to 0
@@ -27,7 +28,67 @@ command /m:
             add 1 to {_N}
         open {_gui} to player
 
+command /customrecipe_all:
+    description: コマンド
+    permission: yuki.menu
+    trigger:
+        set {_gui} to a new chest inventory with 6 row with name "メニュー"
+
+        set {_itemList::*} to ghast spawn egg
+        set {_nameList::*} to "safarinet"
+        set {_loreList::*} to "Mobを捕まえるボール"
+        set {_cmdList::*} to "customrecipe safarinet"
+
+        set {_texturesList::*} to ""
+
+        set {_N} to 0
+        loop {_itemList::*}:
+            set {_item} to {_itemList::%loop-index%}
+            set name of {_item} to {_nameList::%loop-index%}
+            set line 1 of {_item}'s lore to {_loreList::%loop-index%}
+            add "{cmd: ""%{_cmdList::%loop-index%}%""}" to {_item}'s nbt
+            if {_itemList::%loop-index%} is player head:
+                add "{SkullOwner:{Id:[I;-475097093,-1232581123,-1897520009,-1863176499],Properties:{textures:[{Value:""%{_texturesValueList::%{_texturesList::%loop-index%}%}%""}]}}}" to {_item}'s nbt
+            set slot {_N} of {_gui} to {_item}
+            add 1 to {_N}
+        open {_gui} to player
+
+command /customrecipe <text>:
+    description: コマンド
+    permission: yuki.menu
+    trigger:
+        if arg-1 is "safarinet":
+            set {_itemList::*} to string, string, string, string, ender pearl, string, string, string, string
+            set {_result} to ghast spawn egg
+            set name of {_result} to "safarinet"
+
+        set {_gui} to a new chest inventory with 3 row with name "レシピ"
+        set {_N} to 0
+        loop {_itemList::*}:
+            set {_item} to {_itemList::%loop-index%}
+            set slot {_N} of {_gui} to {_item}
+            if mod({_N}, 3) is 2:
+                add 6 to {_N}
+            add 1 to {_N}
+        set {_item} to player head
+        add "{SkullOwner:{Id:[I;-475097093,-1232581123,-1897520009,-1863176499],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGJmOGI2Mjc3Y2QzNjI2NjI4M2NiNWE5ZTY5NDM5NTNjNzgzZTZmZjdkNmEyZDU5ZDE1YWQwNjk3ZTkxZDQzYyJ9fX0=""}]}}}" to {_item}'s nbt
+        set slot 13 of {_gui} to {_item}
+
+        set {_return} to redstone block
+        set name of {_return} to "リストへ戻る"
+        add "{cmd: ""customrecipe_all""}" to {_return}'s nbt
+        set slot 22 of {_gui} to {_return}
+
+        set {_itemList::*} to 6,7,8,15,17,24,25,26
+        loop {_itemList::*}:
+            set {_item} to black stained glass pane
+            set slot loop-value of {_gui} to {_item}
         
+        set slot 16 of {_gui} to {_result}
+        
+        open {_gui} to player
+
+
 command /select <text> <text> [<text>]:
     description: コマンド
     permission: yuki.menu
@@ -50,11 +111,6 @@ command /select <text> <text> [<text>]:
             set {select_chat::%player%::cmd} to {_cmd}
             send arg-3 to player
 
-
-on server stop:
-
-
-
 on chat:
     if {select_chat::%player%::flag} is true:
         cancel event
@@ -66,6 +122,12 @@ on chat:
 
 on inventory click:
     if name of event-inventory is "メニュー":
+        cancel event
+        set {_cmd} to tag "cmd" of nbt of event-item
+        close player's inventory
+        execute player command {_cmd}
+        
+    if name of event-inventory is "レシピ":
         cancel event
         set {_cmd} to tag "cmd" of nbt of event-item
         close player's inventory

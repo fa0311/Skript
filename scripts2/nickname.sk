@@ -1,0 +1,29 @@
+
+command /name:
+    description: メニュー
+    permission: yuki.menu
+    aliases: /menu
+    trigger:
+        set {_gui} to a new chest inventory with 6 row with name "メニュー"
+
+        set {_itemList::*} to stone, stone
+        set {_nameList::*} to "%player%", "&eVisitor&r%player%"
+        set {_loreList::*} to "デフォルト", "みんなにもらえる"
+
+
+        if {achievementlist::%player%::god} is true:
+            add diamond to {_itemList::*}
+            add "&eGOD&r%player%" to {_nameList::*}
+            add "神" to {_loreList::*}
+
+
+
+        set {_N} to 0
+        loop {_itemList::*}:
+            set {_item} to {_itemList::%loop-index%}
+            set name of {_item} to {_nameList::%loop-index%}
+            set line 1 of {_item}'s lore to {_loreList::%loop-index%}
+            add "{cmd: ""/nickname %player% %{_nameList::%loop-index%}%""}" to {_item}'s nbt
+            set slot {_N} of {_gui} to {_item}
+            add 1 to {_N}
+        open {_gui} to player

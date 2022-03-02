@@ -35,8 +35,11 @@ on join:
             execute console command "/mv clone mv/player_default player/%player%"
             execute console command "/mvtp %player% world"
             broadcast "%player%さんが初参加です！"
+            execute console command "/execute in minecraft:overworld run spawnpoint %player% 0 60 0"
     
     if {whitelist::%{_player}%} is true:
+        send "&aけむちゃんサーバーへようこそ！"
+        send "&a/menu と入力するとこのサーバーで使えるコマンドリストが表示されます"
         execute console command "/luckperms user %player% parent add white_list"
         execute console command "/mv import player/%player% normal"
 

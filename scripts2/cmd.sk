@@ -5,3 +5,10 @@ command /player version:
         loop all players:
             make console execute command "/papi cmdparse %loop-player% tellraw %player% {""text"":""%loop-player%: %%viaversion_player_protocol_version%%""}"
 
+
+command /head_textures <text>:
+    description: あたま
+    trigger:
+        set {_item} to player head
+        add "{SkullOwner:{Id:[I;-475097093,-1232581123,-1897520009,-1863176499],Properties:{textures:[{Value:""%arg-1%""}]}}}" to {_item}'s nbt
+        give player {_item}

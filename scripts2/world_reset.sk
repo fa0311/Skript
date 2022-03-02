@@ -1,0 +1,52 @@
+command /world_reset__:
+    description: world reset
+    usage: failed
+    permission: op
+    trigger:
+
+        set {_Block} to block at location at 23, 62, 0 in "mv/resource"
+        if {_Block} is water:
+            broadcast "&4リスポーン地点が水だったため資源ワールドをリセットします"
+            make console execute command "/world_reset"
+
+        else:
+            make console execute command "/dynmap fullrender mv/resource"
+            broadcast "&4ネザーをリセットします"
+            wait 5 second
+            make console execute command "/mv regen mv/resource_nether -s %{_random}%"
+            make console execute command "/mvconfirm"
+            make console execute command "/dynmap fullrender mv/resource_nether"
+            broadcast "&4エンドをリセットします"
+            wait 5 second
+            make console execute command "/mv regen mv/resource_end -s %{_random}%"
+            make console execute command "/mvconfirm"
+            make console execute command "/dynmap fullrender mv/resource_end"
+            broadcast "&4ワールドをリンクします"
+            wait 5 second
+            make console execute command "/mvnp link nether mv/resource mv/resource_nether"
+            make console execute command "/mvnp link end mv/resource mv/resource_end"
+
+
+command /world_reset:
+    description: world reset
+    usage: failed
+    permission: op
+    trigger:
+        broadcast "&4資源ワールドをリセットします"
+        set {_random} to a random integer between 1 and 99999999
+        make console execute command "/mv regen mv/resource -s %{_random}%"
+        make console execute command "/mvconfirm"
+        wait 7 second
+        make console execute command "/skript reload scripts"
+        wait 3 second
+        make console execute command "/world_reset__"
+
+
+
+command /gheahgaega:
+    description: world reset
+    usage: failed
+    permission: op
+    trigger:
+
+        

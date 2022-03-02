@@ -40,11 +40,18 @@ every 1 tick:
 on player world change:
     if world is "world_nether":
         execute console command "/mvtp %player% world"
-    wait 1 tick
-    execute console command "/tab reload"
+    if "%world%" is "mv/build":
+        send "共有建築ワールドへようこそ"
+        send "資源の採取は自由ですがy30以下には行けません"
 
+command /w:
+    description: ロビーにテレポート
+    permission: yuki.world
+    trigger:
+        stopTimer(3, player, "テレポート", "/mvtp %player% world")
+        
 command /world:
-    description:ロビーにテレポート
+    description: ロビーにテレポート
     permission: yuki.world
     trigger:
         stopTimer(3, player, "テレポート", "/mvtp %player% world")
